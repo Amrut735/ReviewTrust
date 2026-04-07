@@ -14,7 +14,6 @@ backend/playwright_profiles/
 backend/cache/
 
 # ── ML model artefacts (large binaries — train locally) ──────
-backend/models/*.pkl
 
 # ── Debug / temp files ───────────────────────────────────────
 backend/debug_*.py
