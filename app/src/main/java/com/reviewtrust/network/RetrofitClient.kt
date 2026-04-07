@@ -11,10 +11,8 @@ import java.util.concurrent.TimeUnit
  */
 object RetrofitClient {
 
-    // Backend URL: use your PC's LAN IP so a physical device can reach it.
-    // If using ADB USB tunnel:  adb reverse tcp:8000 tcp:8000  → use "http://localhost:8000/"
-    // Current PC LAN IP: 10.16.244.1
-    private const val BASE_URL = "http://127.0.0.1:8000/"
+    // Backend URL: Live Render Backend
+    private const val BASE_URL = "https://reviewtrust.onrender.com/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
