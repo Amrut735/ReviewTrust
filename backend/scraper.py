@@ -473,8 +473,14 @@ def _scrape_amazon_playwright(asin: str, domain: str) -> List[Dict[str, str]]:
             page.goto(reviews_base + "&pageNumber=1",
                       wait_until="domcontentloaded", timeout=30000)
 
-            # If redirected to sign-in, session expired — re-login in headed mode
+            # If redirected to sign-in, session expired
             if "ap/signin" in page.url:
+                if os.environ.get("RENDER") or os.environ.get("STREAMLIT") or os.environ.get("AWS_EXECUTION_ENV"):
+                    logger.error("Amazon session expired. Cannot launch interactive login in cloud environment.")
+                    logger.error("Please update your AMAZON_SESSION_URL with a fresh cookie zip.")
+                    context.close()
+                    return []
+                
                 logger.warning("Amazon session expired. Re-launching headed browser for login...")
                 context.close()
                 # Re-launch in headed mode for interactive login
