@@ -1,0 +1,37 @@
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# ── Playwright saved browser profiles (contain personal cookies) ─
+backend/playwright_profiles/
+
+# ── Analysis cache ───────────────────────────────────────────
+backend/cache/
+
+# ── ML model artefacts (large binaries — train locally) ──────
+backend/models/*.pkl
+
+# ── Debug / temp files ───────────────────────────────────────
+backend/debug_*.py
+backend/amazon_test.json
+backend/fk_debug.html
+*.logcat
+Error in *.txt
+SUMMARY.md
+
+# ── Dataset archive ──────────────────────────────────────────
+*.csv.zip
+
+# ── IDE / OS ─────────────────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+.gradle/
+local.properties
+.DS_Store
+Thumbs.db
