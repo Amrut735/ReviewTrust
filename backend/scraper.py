@@ -373,6 +373,7 @@ def _scrape_amazon(product_url: str, max_reviews: int = 60) -> List[Dict[str, st
     }
 
     reviews: List[Dict[str, Any]] = []
+    seen_texts = set()
     page = 1
     
     while len(reviews) < max_reviews:
@@ -407,11 +408,19 @@ def _scrape_amazon(product_url: str, max_reviews: int = 60) -> List[Dict[str, st
                 logger.debug(f"RapidAPI raw response: {str(data)[:500]}")
             break # No more reviews returned on this page
         
+        new_reviews_found = 0
         for rev in api_reviews:
             text = rev.get("content", "")
             if not text or len(text) < 10:
                 continue
                 
+            text_hash = hash(text.lower().strip())
+            if text_hash in seen_texts:
+                continue
+            
+            seen_texts.add(text_hash)
+            new_reviews_found += 1
+            
             reviews.append(_make_review_dict(
                 text, "amazon",
                 reviewer_name=rev.get("reviewer"),
@@ -422,7 +431,12 @@ def _scrape_amazon(product_url: str, max_reviews: int = 60) -> List[Dict[str, st
             if len(reviews) >= max_reviews:
                 break
                 
-        logger.info("  ... scraped %d reviews from page %d", len(api_reviews), page)
+        logger.info("  ... scraped %d unique reviews from page %d", new_reviews_found, page)
+        
+        # If the API just returned identical reviews from the previous page, paginating is broken
+        if new_reviews_found == 0:
+            break
+            
         page += 1
 
     logger.info("Amazon: RapidAPI returned %d reviews for ASIN=%s", len(reviews), asin)
