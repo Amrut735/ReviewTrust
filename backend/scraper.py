@@ -390,8 +390,20 @@ def _scrape_amazon(product_url: str) -> List[Dict[str, str]]:
 
     reviews: List[Dict[str, Any]] = []
     
-    # Safely extract reviews from JSON response
+    # RapidAPI occasionally switches between two different backend schemas under the hood. 
+    # Schema A: {"data": {"reviews": [...]}}
+    # Schema B: {"body": {"top_reviews": [...]}}
     api_reviews = data.get("data", {}).get("reviews", [])
+    if not api_reviews:
+        api_reviews = data.get("body", {}).get("top_reviews", [])
+    
+    if not api_reviews:
+        logger.warning(f"RapidAPI 'reviews' list is empty. JSON keys found: {list(data.keys())}")
+        if "data" in data:
+            logger.warning(f"RapidAPI 'data' keys: {list(data['data'].keys())}")
+        if "body" in data:
+            logger.warning(f"RapidAPI 'body' keys: {list(data['body'].keys())}")
+        logger.debug(f"RapidAPI raw response: {str(data)[:500]}")
     
     for rev in api_reviews:
         text = rev.get("content", "")
