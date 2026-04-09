@@ -18,6 +18,7 @@ Myntra    – Direct JSON API (xt.myntra.com) via curl_cffi; Playwright headless
 Meesho    – Playwright headless (heavy React/GraphQL; no open API).
 """
 
+import os
 import re
 import time
 import random
