@@ -52,7 +52,7 @@ Product URL (Amazon / Flipkart / Nykaa / Myntra / Meesho)
 │  Extracts: text, reviewer name, date, verified status     │
 ├─────────────────────────────────────────────────────────┤
 │  Stage 2: ML CLASSIFICATION                               │
-│  TF-IDF Vectorization → Logistic Regression               │
+│  TF-IDF Vectorization → AdaBoost Classifier               │
 │  Output: fake / genuine label per review                  │
 ├─────────────────────────────────────────────────────────┤
 │  Stage 3: SENTIMENT ANALYSIS                              │
@@ -100,7 +100,7 @@ Product URL (Amazon / Flipkart / Nykaa / Myntra / Meesho)
 │                          │           │  ┌──────────┐  ┌─────────────┐  │
 │  • Paste product URL     │           │  │ Scraper  │  │ ML Model    │  │
 │  • View Trust Score      │           │  │ (5 sites)│  │ (TF-IDF +   │  │
-│  • Read Explanations     │           │  │          │  │  LogReg)    │  │
+│  • Read Explanations     │           │  │          │  │  AdaBoost)  │  │
 │  • Sentiment Charts      │           │  └────┬─────┘  └──────┬──────┘  │
 │  • Spike Detection       │           │       │               │         │
 │  • AI Summary            │           │  ┌────▼───────────────▼──────┐  │
@@ -156,7 +156,7 @@ Analyzes reviewer accounts: total review count, verified purchase ratio, and wri
 | **Android** | Kotlin, Jetpack Compose, Material 3 | Native UI with rich dashboard |
 | **Network** | Retrofit + OkHttp | Type-safe backend communication |
 | **Backend** | Python, FastAPI, Uvicorn | Async API serving the ML pipeline |
-| **ML** | scikit-learn (Logistic Regression + TF-IDF) | Binary classification: fake vs genuine |
+| **ML** | scikit-learn (AdaBoost + TF-IDF) | Binary classification: fake vs genuine |
 | **NLP** | VADER Sentiment, NLTK | Polarity scoring and text processing |
 | **Explainability** | LIME (Local Interpretable Model-agnostic Explanations) | Per-review feature attribution |
 | **Summarization** | Sumy LSA (Latent Semantic Analysis) | Extractive summary of genuine reviews |
@@ -192,7 +192,7 @@ ReviewTrust/
 │   ├── trust_score.py                # Composite trust score calculator
 │   ├── explain.py                    # LIME explainability engine
 │   ├── models/
-│   │   ├── fake_review_model.pkl     # Trained LogReg model
+│   │   ├── fake_review_model.pkl     # Trained AdaBoost model
 │   │   └── vectorizer.pkl            # Trained TF-IDF vectorizer
 │   └── dataset/
 │       └── reviews.csv              # Training dataset
