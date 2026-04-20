@@ -43,45 +43,45 @@
 Product URL (Amazon / Flipkart / Nykaa / Myntra / Meesho)
         │
         ▼
-┌─────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────┐
 │  Stage 1: SCRAPING                                       │
 │  ├── Amazon: RapidAPI (primary) + Playwright (fallback)  │
 │  ├── Flipkart: curl_cffi (Chrome 124 TLS impersonation)  │
-│  ├── Nykaa/Myntra: Direct JSON API via curl_cffi          │
-│  └── Meesho: Playwright headless (GraphQL)                │
-│  Extracts: text, reviewer name, date, verified status     │
-├─────────────────────────────────────────────────────────┤
-│  Stage 2: ML CLASSIFICATION                               │
-│  TF-IDF Vectorization → AdaBoost Classifier               │
-│  Output: fake / genuine label per review                  │
-├─────────────────────────────────────────────────────────┤
-│  Stage 3: SENTIMENT ANALYSIS                              │
-│  VADER polarity scoring on genuine reviews only            │
-│  Output: positive%, negative%, neutral%, avg compound     │
-├─────────────────────────────────────────────────────────┤
-│  Stage 4: REVIEW SPIKE DETECTION                          │
-│  Temporal analysis of review dates                         │
-│  Flags suspicious bursts within short time windows         │
-├─────────────────────────────────────────────────────────┤
-│  Stage 5: REVIEWER QUALITY PROFILING                      │
-│  Per-reviewer analysis: total reviews, verified ratio      │
-│  Flags accounts with characteristics of purchased reviews  │
-├─────────────────────────────────────────────────────────┤
-│  Stage 6: EXPLAINABILITY (LIME)                           │
-│  Per-review explanations: which words drove the decision   │
-│  Parallel ThreadPoolExecutor for performance              │
-│  Human-readable reasons: "Excessive promotional language"  │
-├─────────────────────────────────────────────────────────┤
-│  BONUS: LSA SUMMARIZATION                                  │
-│  Extractive summary of genuine reviews using Sumy LSA      │
-│  Gives users a quick "what real buyers think" overview     │
-└─────────────────────────────────────────────────────────┘
+│  ├── Nykaa/Myntra: Direct JSON API via curl_cffi         │
+│  └── Meesho: Playwright headless (GraphQL)               │
+│  Extracts: text, reviewer name, date, verified status    │
+├──────────────────────────────────────────────────────────┤
+│  Stage 2: ML CLASSIFICATION                              │
+│  TF-IDF Vectorization → AdaBoost Classifier              │
+│  Output: fake / genuine label per review                 │
+├──────────────────────────────────────────────────────────┤
+│  Stage 3: SENTIMENT ANALYSIS                             │
+│  VADER polarity scoring on genuine reviews only          │
+│  Output: positive%, negative%, neutral%, avg compound    │
+├──────────────────────────────────────────────────────────┤
+│  Stage 4: REVIEW SPIKE DETECTION                         │
+│  Temporal analysis of review dates                       │
+│  Flags suspicious bursts within short time windows       │
+├──────────────────────────────────────────────────────────┤
+│  Stage 5: REVIEWER QUALITY PROFILING                     │
+│  Per-reviewer analysis: total reviews, verified ratio    │
+│  Flags accounts with characteristics of purchased reviews│
+├──────────────────────────────────────────────────────────┤
+│  Stage 6: EXPLAINABILITY (LIME)                          │
+│  Per-review explanations: which words drove the decision │
+│  Parallel ThreadPoolExecutor for performance             │
+│  Human-readable reasons: "Excessive promotional language"│
+├──────────────────────────────────────────────────────────┤
+│  BONUS: LSA SUMMARIZATION                                │
+│  Extractive summary of genuine reviews using Sumy LSA    │
+│  Gives users a quick "what real buyers think" overview   │
+└──────────────────────────────────────────────────────────┘
         │
         ▼
 ┌─────────────────────────────────────────────┐
 │  COMPOSITE TRUST SCORE (0–100)              │
 │  Fuses: ML predictions + sentiment curves   │
-│  + reviewer quality + temporal analysis      │
+│  + reviewer quality + temporal analysis     │
 │                                             │
 │  Score ≥ 80: "Safe to buy"                  │
 │  Score 60–79: "Proceed with caution"        │
@@ -94,9 +94,9 @@ Product URL (Amazon / Flipkart / Nykaa / Myntra / Meesho)
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────┐           ┌──────────────────────────────────┐
-│   Android App            │   HTTP    │   FastAPI Backend (Render)       │
-│   (Jetpack Compose)      │ ────────► │                                  │
+┌──────────────────────────┐           ┌─────────────────────────────────┐
+│   Android App            │   HTTP    │   FastAPI Backend (Render)      │
+│   (Jetpack Compose)      │ ────────► │                                 │
 │                          │           │  ┌──────────┐  ┌─────────────┐  │
 │  • Paste product URL     │           │  │ Scraper  │  │ ML Model    │  │
 │  • View Trust Score      │           │  │ (5 sites)│  │ (TF-IDF +   │  │
@@ -108,11 +108,11 @@ Product URL (Amazon / Flipkart / Nykaa / Myntra / Meesho)
 │                          │   JSON    │  │   Sentiment · Spikes ·    │  │
 │                          │           │  │   Quality · Summary ·     │  │
 │                          │           │  │   LIME Explainability     │  │
-└─────────────────────────┘           │  └────────────────────────────┘  │
-                                       │                                  │
+└──────────────────────────┘           │  └───────────────────────────┘  │
+                                       │                                 │
                                        │  Cache: File-based, 1-week TTL  │
-                                       │  Deploy: Docker on Render        │
-                                       └──────────────────────────────────┘
+                                       │  Deploy: Docker on Render       │
+                                       └─────────────────────────────────┘
 ```
 
 ---
